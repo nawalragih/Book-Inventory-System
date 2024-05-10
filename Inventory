@@ -1,0 +1,86 @@
+#include <iostream>
+#include <iomanip>  
+#include <algorithm>  
+#include "books.h"
+
+using namespace std;
+
+const int ARRAY_SIZE = 5;
+
+struct Book {
+    string title;
+    string author;
+    double price;
+    int yearPublished;
+};
+
+void initializeBook(Book& book) {
+    cout << "Title: ";
+    getline(cin, book.title);
+
+    cout << "Author: ";
+    getline(cin, book.author);
+
+    cout << "Price: ";
+    cin >> book.price;
+
+    cout << "Year Published: ";
+    cin >> book.yearPublished;
+
+    cin.ignore();  
+}
+
+void initializeBookArray(Book bookArray[]) {
+    for (int i = 0; i < ARRAY_SIZE; ++i) {
+        cout << "\nEnter details for book " << i + 1 << ":\n";
+        initializeBook(bookArray[i]);
+    }
+}
+
+void printBook(const Book& book) {
+    cout << setw(20) << book.title
+        << setw(20) << book.author
+        << setw(10) << fixed << setprecision(2) << book.price
+        << setw(8) << book.yearPublished
+        << "\n";
+}
+
+void printBookArray(const string& header, const Book bookArray[]) {
+    cout << "\n" << header << ":\n";
+    cout << setw(15) << "Title"
+        << setw(20) << "Author"
+        << setw(15) << "Price"
+        << setw(9) << "Year\n";
+
+    for (int i = 0; i < ARRAY_SIZE; ++i) {
+        printBook(bookArray[i]);
+    }
+}
+
+void insertionSort(Book bookArray[]) {
+    for (int i = 1; i < ARRAY_SIZE; ++i) {
+        Book key = bookArray[i];
+        int j = i - 1;
+
+        while (j >= 0 && bookArray[j].title > key.title) {
+            bookArray[j + 1] = bookArray[j];
+            j = j - 1;
+        }
+
+        bookArray[j + 1] = key;
+    }
+}
+
+int main() {
+    Book bookArray[ARRAY_SIZE];
+
+    cout << "Book Entry Section" << endl;
+    cout << "------------------" << endl;
+
+    initializeBookArray(bookArray);
+    printBookArray("Original Array", bookArray);
+    insertionSort(bookArray);
+    printBookArray("Sorted Array", bookArray);
+
+    return 0;
+}
